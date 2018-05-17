@@ -233,7 +233,7 @@ return_to_control : RETURN CONTROL_FUNCTION_NAME;
 
 counter_declaration : 
 	COUNTER COUNTER_NAME L_CURL
-		TYPE COLON counter_type SEMICLON
+		'type' COLON counter_type SEMICOLON
 		(direct_or_static SEMICOLON)?
 		(INSTANCE_COUNT COLON const_expr SEMICOLON)?
 		( MIN_WIDTH COLON const_expr SEMICOLON )?
@@ -248,7 +248,7 @@ static_attribute : STATIC COLON TABLE_NAME ;
 
 meter_declaration :
 	METER METER_NAME L_CURL
-		TYPE COLON meter_type SEMICOLON
+		'type' COLON meter_type SEMICOLON
 		( RESULT COLON field_ref SEMICOLON )?
 		( direct_or_static SEMICOLON )?
 		( INSTANCE_COUNT COLON const_expr SEMICOLON )?
@@ -298,13 +298,13 @@ arg_list : general_expr (COMMA general_expr)* ;
 action_profile_declaration :
     ACTION_PROFILE ACTION_PROFILE_NAME L_CURL
 		action_specification
-		( SIZE COLON const_expr SEMICOLON )
+		( 'size' COLON const_expr SEMICOLON )
 		( DYNAMIC_SELECTOR_NAME COLON SELECTOR_NAME SEMICOLON )
 	R_CURL
 	;
 
 action_specification :
-	ACTIONS L_CURL ( ACTION_NAME SEMICOLON ) + R_CURL ;
+	'actions' L_CURL ( ACTION_NAME SEMICOLON ) + R_CURL ;
 
 action_selector_declaration : 
 	ACTION_SELECTOR SELECTOR_NAME L_CURL
@@ -314,12 +314,12 @@ action_selector_declaration :
 
 table_declaration : 
 	TABLE TABLE_NAME L_CURL
-		( READS L_CURL field_match + R_CURL ) 
+		( 'reads' L_CURL field_match + R_CURL ) 
 		table_actions
-		( MIN_SIZE COLON const_expr SEMICOLON ) 
-		( MAX_SIZE COLON const_expr SEMICOLON ) 
-		( SIZE COLON const_expr SEMICOLON )
-		( SUPPORT_TIMEOUT COLON bool_value SEMICOLON ) 
+		( 'min_size' COLON const_expr SEMICOLON ) 
+		( 'max_size' COLON const_expr SEMICOLON ) 
+		( 'size' COLON const_expr SEMICOLON )
+		( 'support_timeout' COLON bool_value SEMICOLON ) 
 	R_CURL
 	;
 
@@ -328,7 +328,7 @@ field_match : field_or_masked_ref COLON field_match_type ;
 field_or_masked_ref :
 	header_ref | field_ref | field_ref MASK const_expr ;
 
-field_match_type : EXACT | TERNARY | LPM | INDEX | RANGE | VALID ;
+field_match_type : 'exact' | 'ternary' | 'lpm' | 'index' | RANGE | VALID ;
 
 table_actions :
 	action_specification | action_profile_specification ;
@@ -356,11 +356,11 @@ case_list : action_case + | hit_miss_case + ;
 
 action_case : action_or_default control_block ;
 
-action_or_default : ACTION_NAME | DEFAULT ;
+action_or_default : ACTION_NAME | 'default' ;
 
 hit_miss_case : hit_or_miss control_block ;
 
-hit_or_miss : HIT | MISS ;
+hit_or_miss : HITS | MISS ;
 
 if_else_statement :
 	IF L_PARA bool_expr R_PARA control_block 
@@ -383,7 +383,7 @@ method_param : param_qualifier* type_spec PARAM_NAME ;
 
 attribute_declaration :
 	ATTRIBUTE ATTRIBUTE_NAME L_CURL
-		TYPE COLON attribute_type SEMICOLON 
+		'type' COLON attribute_type SEMICOLON 
 		( OPTIONAL SEMICOLON )
 	R_CURL ;
 
@@ -400,7 +400,7 @@ extern_attribute_binding :
 	ATTRIBUTE_NAME COLON object_ref | general_expr SEMICOLON ;
 
 extern_method_call :
-	object_ref DOT METHOD_NAME L_PARA ( arg_list ) R_PARA ;
+	object_ref '.' METHOD_NAME L_PARA ( arg_list ) R_PARA ;
 
 
 /* 
