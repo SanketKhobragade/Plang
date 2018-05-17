@@ -459,6 +459,8 @@ CONTROL_FN_NAME : [a-zA-Z][a-zA-Z0-9]* ;
 TYPE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
 METHOD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
 ATTRIBUTE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+STREAM_FUNCTION_ALGORITHM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+VARIABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
 HITS : 'hit'; 
 IF : 'if';
 IN : 'in' ;
