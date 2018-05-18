@@ -24,36 +24,29 @@ p4_declaration :
 	extern_instance_declaration |
 	control_function_declaration ;
 
-const_value :
-	bool_value | (PLUS | MINUS)?  (width_spec)? unsigned_value;
+const_value : bool_value | ('+' | '-' )? (width_spec)? unsigned_value;
 
 unsigned_value :
-	binary_value |
-	decimal_value |
-	hexadecimal_value;
+	binary_value | decimal_value | hexadecimal_value ;
 
-bool_value : TRUE | FALSE;
-
+bool_value : 'true' | 'false' ;
 binary_value : binary_base binary_digit+;
+binary_base : '0b'| '0B';
+binary_digit : ('_'| '0' | '1' );
 
 decimal_value : decimal_digit+;
+decimal_digit : (binary_digit|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9');
 
-hexadecimal_value : hexadecimal_base hexadecimal_digit+ ;
+hexadecimal_value : hexadecimal_base hexadecimal_digit+;
+hexadecimal_base : '0x' | '0X';
+hexadecimal_digit : 
+	(decimal_digit |'a'|'b'|'c'|'d'|'e'|'f'|'A'|'B'|'C'|'D'|'E'|'F');
 
-binary_base : '0b' | '0B' ;
-
-hexadecimal_base : '0x' | '0X' ;
-
-binary_digit : '_' | '0' | '1' ;
-
-decimal_digit : binary_digit | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
-
-hexadecimal_digit :
-	decimal_digit | 'a' | 'A' | 'b' | 'B' | 'c' | 'C' | 'd' | 'D'| 'e' | 'E' | 'f' | 'F' ;
-
-width_spec : decimal_digit+ 'w' | decimal_digit+ 's' ;
+width_spec : (decimal_digit+)'w' | (decimal_digit+)'s';
 
 field_value : const_value ;
+
+
 type_spec :
 	HEADER  HEADER_TYPE_NAME? |
 	METADATA  HEADER_TYPE_NAME? |
@@ -117,7 +110,7 @@ header_type_declaration :
 	HEADER_TYPE HEADER_TYPE_NAME L_CURL header_dec_body R_CURL ;
 
 header_dec_body :
-	FIELDS L_CURL header_dec_body * R_CURL ('length' COLON length_expr SEMICOLON)? ;
+	FIELDS L_CURL field_dec * R_CURL ('length' COLON length_expr SEMICOLON)? ;
 
 field_dec : data_type FIELD_NAME ;
 length_bin_op : '+' | '-' | '*' | '<<' | '>>' ;
@@ -435,32 +428,6 @@ FIELD_LIST_CALCULATION : 'field_list_calculation';
 FIELDS : 'fields';
 HEADER : 'header';
 HEADER_TYPE : 'header_type';
-HEADER_TYPE_NAME : [a-zA-Z][a-zA-Z0-9]*; 
-INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PRAGMA_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-HEADER_INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_LIST_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_LIST_CALCULATION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-VALUE_SET_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARSER_STATE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-CONTROL_FUNCTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARSER_EXCEPTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-COUNTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-TABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-METER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-REGISTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ACTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARAM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ACTION_PROFILE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-DYNAMIC_SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-CONTROL_FN_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-TYPE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-METHOD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ATTRIBUTE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-STREAM_FUNCTION_ALGORITHM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-VARIABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
 HITS : 'hit'; 
 IF : 'if';
 IN : 'in' ;
@@ -508,10 +475,47 @@ VARBIT : 'varbit';
 VERIFY : 'verify';
 WIDTH : 'width';
 
+
+/* 
+	_NAME defined in above parser rules
+*/
+
+
+
+HEADER_TYPE_NAME : [a-zA-Z][a-zA-Z0-9]*; 
+INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+PRAGMA_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+FIELD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+HEADER_INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+FIELD_LIST_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+FIELD_LIST_CALCULATION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+VALUE_SET_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+PARSER_STATE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+CONTROL_FUNCTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+PARSER_EXCEPTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+COUNTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+TABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+METER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+REGISTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+ACTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+PARAM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+ACTION_PROFILE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+DYNAMIC_SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+CONTROL_FN_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+TYPE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+METHOD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+ATTRIBUTE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+STREAM_FUNCTION_ALGORITHM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+VARIABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
+
+
+
+
 /*
 	TOKENS USED
 */
-WS : [ \t\n\b] -> skip ;
+WS : [ \t\n\b\r]+ -> skip ;
 COLON : ':' ;
 SEMICOLON : ';' ;
 COMMA : ',' ;
