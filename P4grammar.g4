@@ -24,27 +24,27 @@ p4_declaration :
 	extern_instance_declaration |
 	control_function_declaration ;
 
-const_value : bool_value | ('+' | '-' )? (width_spec)? unsigned_value;
+CONST_VALUE : BOOL_VALUE | (PLUS | MINUS )? (WIDTH_SPEC)? UNSIGNED_VALUE;
 
-unsigned_value :
-	binary_value | decimal_value | hexadecimal_value ;
+UNSIGNED_VALUE :
+	BINARY_VALUE | DECIMAL_VALUE | HEXADECIMAL_VALUE ;
 
-bool_value : 'true' | 'false' ;
-binary_value : binary_base binary_digit+;
-binary_base : '0b'| '0B';
-binary_digit : ('_'| '0' | '1' );
+BOOL_VALUE : TRUE | FALSE ;
+BINARY_VALUE : BINARY_BASE BINARY_DIGIT+;
+BINARY_BASE : '0b'| '0B';
+BINARY_DIGIT : ('_'| '0' | '1' );
 
-decimal_value : decimal_digit+;
-decimal_digit : (binary_digit|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9');
+DECIMAL_VALUE : DECIMAL_DIGIT+;
+DECIMAL_DIGIT : (BINARY_DIGIT|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9');
 
-hexadecimal_value : hexadecimal_base hexadecimal_digit+;
-hexadecimal_base : '0x' | '0X';
-hexadecimal_digit : 
-	(decimal_digit |'a'|'b'|'c'|'d'|'e'|'f'|'A'|'B'|'C'|'D'|'E'|'F');
+HEXADECIMAL_VALUE : HEXADECIMAL_BASE HEXADECIMAL_DIGIT+;
+HEXADECIMAL_BASE : '0x' | '0X';
+HEXADECIMAL_DIGIT : 
+	(DECIMAL_DIGIT |'a'|'b'|'c'|'d'|'e'|'f'|'A'|'B'|'C'|'D'|'E'|'F');
 
-width_spec : (decimal_digit+)'w' | (decimal_digit+)'s';
+WIDTH_SPEC : (DECIMAL_DIGIT+)'w' | (DECIMAL_DIGIT+)'s';
 
-field_value : const_value ;
+field_value : CONST_VALUE ;
 
 
 type_spec :
@@ -66,9 +66,9 @@ type_spec :
 
 data_type :
 	BIT |
-	BIT LT decimal_digit+ GT | 
-	VARBIT LT decimal_digit+ GT |
-	INT LT decimal_digit+ GT ;
+	BIT LT DECIMAL_DIGIT+ GT | 
+	VARBIT LT DECIMAL_DIGIT+ GT |
+	INT LT DECIMAL_DIGIT+ GT ;
 
 object_ref :
 	INSTANCE_NAME | 
@@ -81,10 +81,10 @@ general_expr :
 bool_expr :
 	VALID L_PARA object_ref R_PARA | bool_expr bool_op bool_expr |
 	NOT bool_expr | L_PARA bool_expr R_PARA | arith_expr rel_op arith_expr |
-	bool_value ;
+	BOOL_VALUE ;
 
 arith_expr :
-	object_ref | const_value |
+	object_ref | CONST_VALUE |
 	MAX L_PARA arith_expr COMMA arith_expr R_PARA |
 	MIN L_PARA arith_expr COMMA arith_expr R_PARA|
 	L_PARA arith_expr R_PARA |
@@ -112,7 +112,7 @@ header_type_declaration :
 header_dec_body :
 	FIELDS L_CURL field_dec * R_CURL ('length' COLON length_expr SEMICOLON)? ;
 
-field_dec : data_type FIELD_NAME ;
+field_dec : data_type FIELD_NAME SEMICOLON;
 length_bin_op : '+' | '-' | '*' | '<<' | '>>' ;
 length_expr :
 	const_expr |
@@ -312,7 +312,7 @@ table_declaration :
 		( 'min_size' COLON const_expr SEMICOLON ) 
 		( 'max_size' COLON const_expr SEMICOLON ) 
 		( 'size' COLON const_expr SEMICOLON )
-		( 'support_timeout' COLON bool_value SEMICOLON ) 
+		( 'support_timeout' COLON BOOL_VALUE SEMICOLON ) 
 	R_CURL
 	;
 
@@ -420,7 +420,6 @@ DYNAMIC_ACTION_SELECTION : 'dynamic_action_selection' ;
 ELSE : 'else' ;
 EXTERN : 'extern';
 EXTERN_TYPE : 'extern_type';
-EXTERN_TYPE_NAME : [a-zA-Z][a-zA-Z0-9]*;
 EXTRACT : 'extract' ;
 FALSE : 'false';
 FIELD_LIST : 'field_list';
@@ -482,33 +481,33 @@ WIDTH : 'width';
 
 
 
-HEADER_TYPE_NAME : [a-zA-Z][a-zA-Z0-9]*; 
-INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PRAGMA_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-HEADER_INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_LIST_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-FIELD_LIST_CALCULATION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-VALUE_SET_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARSER_STATE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-CONTROL_FUNCTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARSER_EXCEPTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-COUNTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-TABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-METER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-REGISTER_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ACTION_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-PARAM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ACTION_PROFILE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-DYNAMIC_SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-CONTROL_FN_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-TYPE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-METHOD_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-ATTRIBUTE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-STREAM_FUNCTION_ALGORITHM_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-VARIABLE_NAME : [a-zA-Z][a-zA-Z0-9]* ;
-
+HEADER_TYPE_NAME : [a-zA-Z][a-zA-Z0-9_]*; 
+INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+PRAGMA_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+FIELD_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+HEADER_INSTANCE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+FIELD_LIST_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+FIELD_LIST_CALCULATION_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+VALUE_SET_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+PARSER_STATE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+CONTROL_FUNCTION_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+PARSER_EXCEPTION_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+COUNTER_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+TABLE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+METER_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+REGISTER_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+ACTION_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+PARAM_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+ACTION_PROFILE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+DYNAMIC_SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+SELECTOR_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+CONTROL_FN_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+TYPE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+METHOD_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+ATTRIBUTE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+STREAM_FUNCTION_ALGORITHM_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+VARIABLE_NAME : [a-zA-Z][a-zA-Z0-9_]* ;
+EXTERN_TYPE_NAME : [a-zA-Z][a-zA-Z0-9_]*;
 
 
 
